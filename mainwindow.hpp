@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QProcess>
+#include <qcombobox.h>
+#include <qobject.h>
 
 class QLineEdit;
 class QPushButton;
@@ -20,13 +22,17 @@ private slots:
     void startDownload();
     void readOutput();
     void processFinished(int exitCode, QProcess::ExitStatus status);
-
-private:
+    void setResolution(const QString &);
+    
+    private:
     QProcess *process;
     QLineEdit *urlInput;
     QPushButton *downloadButton;
     QProgressBar *progressBar;
     QTextEdit *logOutput;
+    QComboBox *resolutionComboBox;
+    QString resolution;
+    
 };
 
 #endif
