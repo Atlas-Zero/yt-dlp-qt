@@ -136,4 +136,8 @@ void MainWindow::setMP4(bool selected){
 
 void MainWindow::setMP3(bool selected){
     if(selected) qDebug() << "mp3 checked";
+    if(mp3Button->isChecked()){
+       resolutionComboBox->setEnabled(false);
+    }
+    else resolutionComboBox->setEnabled(true);
 };
