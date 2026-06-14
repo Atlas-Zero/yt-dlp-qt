@@ -1,13 +1,6 @@
 # yt-dlp-qt
 
-## Build
-
-```
-mkdir build
-cd build
-cmake ..
-make -j8
-```
+yt-dlp-qt is a minimal Qt6 GUI wrapper for yt-dlp, designed to simplify the process of downloading YouTube videos while leaving room for future enhancements.
 
 ## Requirements
 
@@ -18,33 +11,19 @@ QT6:
  - qt6-base-dev
  - qt6-base-doc-dev // optional
 
-```
+```sh
 sudo apt update
 sudo apt install yt-dlp qt6-base-dev qt6-base-doc-dev
 ```
 
-### Alternativen
+## Build
 
-astral-uv (snap)
-
+```sh
+mkdir build
+cd build
+cmake ..
+make -j8
 ```
-sudo snap refresh
-sudo snap install astral-uv
-```
-
-& lib direkt holen 
-
-`uv add yt-dlp`
-
-oder yt-dlp auch direkt über snap
-
-```
-sudo snap refresh
-sudo snap install yt-dlp
-```
-
-weiters könnte man es direkt von der Source 
-[yt-dlp](https://github.com/yt-dlp/yt-dlp) installieren
 
 ## Useful Links
 Dropdown Menu - [ComboBox](https://doc.qt.io/qt-6/qml-qtquick-controls-combobox.html)
