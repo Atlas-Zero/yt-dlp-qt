@@ -83,7 +83,7 @@ MainWindow::MainWindow(QWidget *parent)
     progressBar->setRange(0, 100);
     locationLabel = new QLabel("Download location");
     downloadLocationLabel = new QLabel("No folder selected");
-    downloadLocationLabel->setStyleSheet("color: gray;");
+    //downloadLocationLabel->setStyleSheet("color: gray;");
 
     locationPicker = new QPushButton("Pick folder");
 
@@ -173,18 +173,6 @@ void MainWindow::setResolution(const QString &)
     int height = resolutionComboBox->currentData().toInt();
     resolution = QString("height:%1").arg(height);
     qDebug() << resolution;
-}
-
-void MainWindow::setMP4(bool selected){
-    if(selected) qDebug() << "mp4 checked";
-}
-
-void MainWindow::setMP3(bool selected){
-    if(selected) qDebug() << "mp3 checked";
-    if(mp3Button->isChecked()){
-       resolutionComboBox->setEnabled(false);
-    }
-    else resolutionComboBox->setEnabled(true);
 }
 
 void MainWindow::pickDownloadLocation(){
