@@ -14,6 +14,7 @@
 #include <qlabel.h>
 #include <QObject>
 #include <QRadioButton>
+#include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qlogging.h>
 #include <QFileDialog>
@@ -25,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     auto *central = new QWidget;
     auto *layout = new QVBoxLayout;
     auto *locationLayout = new QHBoxLayout;
+    auto *filenameLayout = new QHBoxLayout;
 
     urlInput = new QLineEdit;
     urlInput->setPlaceholderText("Paste URL...");
@@ -94,8 +96,16 @@ MainWindow::MainWindow(QWidget *parent)
     locationLayout->addWidget(downloadLocationLabel, 1);
     locationLayout->addWidget(locationPicker);
 
+    filenameLabel = new QLabel("Filename");
+    filename = new QLineEdit;
+    filename->setPlaceholderText("Enter Filename");
+
+    filenameLayout->addWidget(filenameLabel);
+    filenameLayout->addWidget(filename, 1);
+
     layout->addWidget(urlInput);
     layout->addLayout(locationLayout);
+    layout->addLayout(filenameLayout);
     layout->addWidget(resolutionComboBox);
     layout->addLayout(hbox);
     layout->addWidget(progressBar);
@@ -122,20 +132,37 @@ void MainWindow::startDownload(bool isAudio)
     QString url = urlInput->text().trimmed();
     if (url.isEmpty())
         return;
-
+    QString filenameT = filename->text().trimmed();
+    
+    if(downloadLocation.isEmpty()) return;
+    
     progressBar->setValue(0);
     logOutput->clear();
 
     QString program = "yt-dlp"; // assume it's in PATH
     QStringList args;
-    if (isAudio)
+    if (isAudio && !filenameT.isEmpty())
     {
+        args << "-o" << (filenameT + ".%(ext)s")
+             << "-x"
+             << "-P" << downloadLocation 
+             << "--audio-format" << fileType
+             << url;
+    }
+    else if(isAudio){
         args << "-x"
              << "-P" << downloadLocation 
              << "--audio-format" << fileType
              << url;
     }
-    else
+    else if(!filenameT.isEmpty()){
+        args << "-o" << (filenameT + ".%(ext)s")
+             << "-P" << downloadLocation 
+             << "-S" << resolution
+             << "--merge-output-format" << fileType
+             << url;
+    }
+    else if(filenameT.isEmpty())
     {
         args << "-P" << downloadLocation 
              << "-S" << resolution

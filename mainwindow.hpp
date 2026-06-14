@@ -10,6 +10,7 @@
 #include <QHBoxLayout>
 #include <QObject>
 #include <QLabel>
+#include <qlabel.h>
 
 class QLineEdit;
 class QPushButton;
@@ -48,6 +49,10 @@ private:
     QString downloadLocation;
     QString resolution;
     QString fileType;
+    QLabel *fileLabel;
+    QLabel *filenameLabel;
+    QLineEdit *filename;
+    
 };
 
 #endif
