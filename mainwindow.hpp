@@ -5,6 +5,7 @@
 #include <QProcess>
 #include <qcombobox.h>
 #include <qobject.h>
+#include <qradiobutton.h>
 
 class QLineEdit;
 class QPushButton;
@@ -23,6 +24,8 @@ private slots:
     void readOutput();
     void processFinished(int exitCode, QProcess::ExitStatus status);
     void setResolution(const QString &);
+    void setMP4(bool selected);
+    void setMP3(bool selected);
     
     private:
     QProcess *process;
@@ -31,7 +34,10 @@ private slots:
     QProgressBar *progressBar;
     QTextEdit *logOutput;
     QComboBox *resolutionComboBox;
+    QRadioButton *mp4Button;
+    QRadioButton *mp3Button;
     QString resolution;
+    QString fileType;
     
 };
 

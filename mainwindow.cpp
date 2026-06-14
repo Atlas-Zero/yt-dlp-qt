@@ -11,6 +11,8 @@
 #include <qdebug.h>
 #include <qlogging.h>
 #include <qobject.h>
+#include <QRadioButton>
+#include <qradiobutton.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), process(new QProcess(this))
@@ -23,8 +25,10 @@ MainWindow::MainWindow(QWidget *parent)
     urlInput->setPlaceholderText("Paste URL...");
 
     downloadButton = new QPushButton("Download");
+
     progressBar = new QProgressBar;
     progressBar->setRange(0, 100);
+
     resolutionComboBox = new QComboBox();
     resolutionComboBox->addItem("144p", 144);
     resolutionComboBox->addItem("240p", 240);
@@ -34,14 +38,20 @@ MainWindow::MainWindow(QWidget *parent)
     resolutionComboBox->addItem("1080p60", 1080);
     resolutionComboBox->addItem("1440p60", 1440);
     resolutionComboBox->addItem("2160p60", 2160);
+
+    mp4Button = new QRadioButton("mp4", this);
+    mp3Button = new QRadioButton("mp3", this);
+    mp4Button->setChecked(true);
     
 
     logOutput = new QTextEdit;
     logOutput->setReadOnly(true);
 
     layout->addWidget(urlInput);
-    layout->addWidget(downloadButton);
+    layout->addWidget(mp4Button);
+    layout->addWidget(mp3Button);
     layout->addWidget(resolutionComboBox);
+    layout->addWidget(downloadButton);
     layout->addWidget(progressBar);
     layout->addWidget(logOutput);
 
@@ -58,7 +68,13 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::processFinished);
 
     connect(resolutionComboBox, &QComboBox::currentTextChanged,
-                    this, &MainWindow::setResolution);
+            this, &MainWindow::setResolution);
+
+    connect(mp4Button, &QRadioButton::toggled, 
+            this, &MainWindow::setMP4);
+
+    connect(mp3Button, &QRadioButton::toggled,
+            this, &MainWindow::setMP3);
 }
 
 void MainWindow::startDownload()
@@ -72,7 +88,16 @@ void MainWindow::startDownload()
 
     QString program = "yt-dlp"; // assume it's in PATH
     QStringList args;
-    args << "-S" << resolution << url;
+    if(mp3Button->isChecked()){
+        args << "-x" 
+             << "--audio-format" << "mp3" 
+             << url;
+    }
+    else{
+        args << "-S" << resolution 
+             << "--merge-output-format" << "mp4"
+             << url;
+    }
 
     process->start(program, args);
 }
@@ -104,3 +129,11 @@ void MainWindow::setResolution(const QString &){
     resolution = QString("height:%1").arg(height); 
     qDebug() << resolution;
 }
+
+void MainWindow::setMP4(bool selected){
+    if(selected) qDebug() << "mp4 checked";
+};
+
+void MainWindow::setMP3(bool selected){
+    if(selected) qDebug() << "mp3 checked";
+};
