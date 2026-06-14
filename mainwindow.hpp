@@ -3,9 +3,12 @@
 
 #include <QMainWindow>
 #include <QProcess>
-#include <qcombobox.h>
-#include <qobject.h>
-#include <qradiobutton.h>
+#include <QComboBox>
+#include <QGroupBox>
+#include <QRadioButton>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QObject>
 
 class QLineEdit;
 class QPushButton;
@@ -20,25 +23,25 @@ public:
     MainWindow(QWidget *parent = nullptr);
 
 private slots:
-    void startDownload();
+    void startDownload(bool isAudio);
     void readOutput();
     void processFinished(int exitCode, QProcess::ExitStatus status);
     void setResolution(const QString &);
-    void setMP4(bool selected);
-    void setMP3(bool selected);
-    
-    private:
+
+private:
     QProcess *process;
     QLineEdit *urlInput;
-    QPushButton *downloadButton;
+    QComboBox *resolutionComboBox;
+    QHBoxLayout *hBox;
+    QGroupBox *audioGroup;
+    QVBoxLayout *audioLayout;
+    QGroupBox *videoGroup;
+    QVBoxLayout *videoLayout;
     QProgressBar *progressBar;
     QTextEdit *logOutput;
-    QComboBox *resolutionComboBox;
-    QRadioButton *mp4Button;
-    QRadioButton *mp3Button;
+    QGroupBox *formatGroupBox;
     QString resolution;
     QString fileType;
-    
 };
 
 #endif
