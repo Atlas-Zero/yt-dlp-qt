@@ -6,6 +6,7 @@
 #include <qcombobox.h>
 #include <qobject.h>
 #include <qradiobutton.h>
+#include <QLabel>
 
 class QLineEdit;
 class QPushButton;
@@ -26,6 +27,7 @@ private slots:
     void setResolution(const QString &);
     void setMP4(bool selected);
     void setMP3(bool selected);
+    void pickDownloadLocation();
     
     private:
     QProcess *process;
@@ -36,6 +38,10 @@ private slots:
     QComboBox *resolutionComboBox;
     QRadioButton *mp4Button;
     QRadioButton *mp3Button;
+    QPushButton *locationPicker;
+    QLabel *downloadLocationLabel;
+    QLabel *locationLabel;
+    QString downloadLocation;
     QString resolution;
     QString fileType;
     

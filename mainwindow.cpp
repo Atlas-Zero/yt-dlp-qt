@@ -7,12 +7,17 @@
 #include <QVBoxLayout>
 #include <QRegularExpression>
 #include <QComboBox>
+#include <qboxlayout.h>
 #include <qcombobox.h>
 #include <qdebug.h>
+#include <qfiledialog.h>
+#include <qlabel.h>
 #include <qlogging.h>
 #include <qobject.h>
 #include <QRadioButton>
+#include <qpushbutton.h>
 #include <qradiobutton.h>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), process(new QProcess(this))
@@ -20,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto *central = new QWidget;
     auto *layout = new QVBoxLayout;
+    auto *locationLayout = new QHBoxLayout;
 
     urlInput = new QLineEdit;
     urlInput->setPlaceholderText("Paste URL...");
@@ -43,11 +49,21 @@ MainWindow::MainWindow(QWidget *parent)
     mp3Button = new QRadioButton("mp3", this);
     mp4Button->setChecked(true);
     
+    locationLabel = new QLabel("Download location");
+    downloadLocationLabel = new QLabel("No folder selected");
+    downloadLocationLabel->setStyleSheet("color: gray;");
+
+    locationPicker = new QPushButton("Pick folder");
 
     logOutput = new QTextEdit;
     logOutput->setReadOnly(true);
 
+    locationLayout->addWidget(locationLabel);
+    locationLayout->addWidget(downloadLocationLabel, 1);
+    locationLayout->addWidget(locationPicker);
+
     layout->addWidget(urlInput);
+    layout->addLayout(locationLayout);
     layout->addWidget(mp4Button);
     layout->addWidget(mp3Button);
     layout->addWidget(resolutionComboBox);
@@ -75,6 +91,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(mp3Button, &QRadioButton::toggled,
             this, &MainWindow::setMP3);
+    
+    connect(locationPicker, &QPushButton::clicked,
+            this, &MainWindow::pickDownloadLocation);
 }
 
 void MainWindow::startDownload()
@@ -89,12 +108,14 @@ void MainWindow::startDownload()
     QString program = "yt-dlp"; // assume it's in PATH
     QStringList args;
     if(mp3Button->isChecked()){
-        args << "-x" 
+        args << "-x"
+             << "-P" << downloadLocation 
              << "--audio-format" << "mp3" 
              << url;
     }
     else{
-        args << "-S" << resolution 
+        args << "-P" << downloadLocation
+             << "-S" << resolution 
              << "--merge-output-format" << "mp4"
              << url;
     }
@@ -132,7 +153,7 @@ void MainWindow::setResolution(const QString &){
 
 void MainWindow::setMP4(bool selected){
     if(selected) qDebug() << "mp4 checked";
-};
+}
 
 void MainWindow::setMP3(bool selected){
     if(selected) qDebug() << "mp3 checked";
@@ -140,4 +161,18 @@ void MainWindow::setMP3(bool selected){
        resolutionComboBox->setEnabled(false);
     }
     else resolutionComboBox->setEnabled(true);
-};
+}
+
+void MainWindow::pickDownloadLocation(){
+    QString folder = QFileDialog::getExistingDirectory(
+        this,
+        "Select Download Folder",
+        QString(),
+        QFileDialog::ShowDirsOnly
+    );
+
+    if(!folder.isEmpty()){
+        downloadLocation = folder;
+        downloadLocationLabel->setText(folder);
+    }
+}
