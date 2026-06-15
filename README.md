@@ -26,4 +26,5 @@ make -j8
 ```
 
 ## Useful Links
-Dropdown Menu - [ComboBox](https://doc.qt.io/qt-6/qml-qtquick-controls-combobox.html)
+Resolution Dropdown Menu - [ComboBox](https://doc.qt.io/qt-6/qml-qtquick-controls-combobox.html)
+Audio Format - [RadioButton](https://doc.qt.io/qt-6/qradiobutton.html)

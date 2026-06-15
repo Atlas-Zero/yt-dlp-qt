@@ -9,6 +9,8 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QObject>
+#include <QLabel>
+#include <qlabel.h>
 
 class QLineEdit;
 class QPushButton;
@@ -27,6 +29,7 @@ private slots:
     void readOutput();
     void processFinished(int exitCode, QProcess::ExitStatus status);
     void setResolution(const QString &);
+    void pickDownloadLocation();
 
 private:
     QProcess *process;
@@ -40,8 +43,16 @@ private:
     QProgressBar *progressBar;
     QTextEdit *logOutput;
     QGroupBox *formatGroupBox;
+    QPushButton *locationPicker;
+    QLabel *downloadLocationLabel;
+    QLabel *locationLabel;
+    QString downloadLocation;
     QString resolution;
     QString fileType;
+    QLabel *fileLabel;
+    QLabel *filenameLabel;
+    QLineEdit *filename;
+    
 };
 
 #endif
